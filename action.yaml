@@ -4,6 +4,31 @@ description: "Wraps the firebase-tools CLI to enable common commands or to be us
 branding:
   icon: "package"
   color: "gray-dark"
+inputs:
+  args:
+    description: 'The arguments to pass to the firebase-tools CLI'
+    required: true
+  FIREBASE_TOKEN:
+    description: 'The Firebase token to use for authentication'
+    required: false
+  GCP_SA_KEY:
+    description: 'The GCP service account key to use for authentication'
+    required: false
+  PROJECT_PATH:
+    description: 'The path to the project directory'
+    required: false
+  PROJECT_ID:
+    description: 'The Firebase project ID to use'
+    required: false
 runs:
-  using: "docker"
-  image: "docker://joinflux/firebase-action:14.6.0"
+  using: "composite"
+  steps:
+    - run: npm i -g firebase-tools@14.6.0
+      shell: bash
+    - run: ${{ github.action_path }}/entrypoint.sh ${{ inputs.args }}
+      shell: bash
+      env:
+        FIREBASE_TOKEN: ${{ inputs.FIREBASE_TOKEN }}
+        GCP_SA_KEY: ${{ inputs.GCP_SA_KEY }}
+        PROJECT_PATH: ${{ inputs.PROJECT_PATH }}
+        PROJECT_ID: ${{ inputs.PROJECT_ID }}
