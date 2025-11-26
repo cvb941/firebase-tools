@@ -23,8 +23,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: npm i -g firebase-tools@14.6.0
-      shell: bash
     - run: ${{ github.action_path }}/entrypoint.sh ${{ inputs.args }}
       shell: bash
       env:

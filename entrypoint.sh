@@ -25,11 +25,11 @@ fi
 
 if [ -n "$PROJECT_ID" ]; then
     echo "setting firebase project to $PROJECT_ID"
-    firebase use --add "$PROJECT_ID"
+    npx firebase-tools@14.6.0 use --add "$PROJECT_ID"
 fi
 
 # if the args starts with ./ we are running a script
 case "$*" in
   ./*) sh -c "$*";;
-  *) sh -c "firebase $*";;
+  *) sh -c "npx firebase-tools@14.6.0 $*";;
 esac
