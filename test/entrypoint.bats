@@ -8,7 +8,8 @@ function setup() {
 }
 
 @test "entrypoint runs successfully" {
-  run env FIREBASE_TOKEN=DUMMY_TOKEN $GITHUB_WORKSPACE/entrypoint.sh --help
+  export FIREBASE_TOKEN=DUMMY_TOKEN
+  run $GITHUB_WORKSPACE/entrypoint.sh --help
   echo "$output"
   [ "$status" -eq 0 ]
 }
