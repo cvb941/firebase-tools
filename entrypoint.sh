@@ -8,10 +8,15 @@ if [ -z "$FIREBASE_TOKEN" ] && [ -z "$GCP_SA_KEY" ]; then
 fi
 
 if [ -n "$GCP_SA_KEY" ]; then
-  echo "Storing GCP_SA_KEY in /opt/gcp_key.json"
-  echo "$GCP_SA_KEY" | base64 -d > /opt/gcp_key.json
-  echo "Exporting GOOGLE_APPLICATION_CREDENTIALS=/opt/gcp_key.json"
-  export GOOGLE_APPLICATION_CREDENTIALS=/opt/gcp_key.json
+  GCP_SA_KEY_PATH="/tmp/gcp_key.json"
+  echo "Storing GCP_SA_KEY in $GCP_SA_KEY_PATH"
+  if [[ "$(uname)" == "Darwin" ]]; then
+    echo "$GCP_SA_KEY" | base64 -D > "$GCP_SA_KEY_PATH"
+  else
+    echo "$GCP_SA_KEY" | base64 -d > "$GCP_SA_KEY_PATH"
+  fi
+  echo "Exporting GOOGLE_APPLICATION_CREDENTIALS=$GCP_SA_KEY_PATH"
+  export GOOGLE_APPLICATION_CREDENTIALS="$GCP_SA_KEY_PATH"
 fi
 
 if [ -n "$PROJECT_PATH" ]; then
@@ -20,11 +25,11 @@ fi
 
 if [ -n "$PROJECT_ID" ]; then
     echo "setting firebase project to $PROJECT_ID"
-    firebase use --add "$PROJECT_ID"
+    npx firebase-tools@14.26.0 use --add "$PROJECT_ID"
 fi
 
 # if the args starts with ./ we are running a script
 case "$*" in
   ./*) sh -c "$*";;
-  *) sh -c "firebase $*";;
+  *) sh -c "npx firebase-tools@14.26.0 $*";;
 esac
