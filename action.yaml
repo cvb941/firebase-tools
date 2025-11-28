@@ -23,6 +23,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
     - run: ${{ github.action_path }}/entrypoint.sh ${{ inputs.args }}
       shell: bash
       env:
