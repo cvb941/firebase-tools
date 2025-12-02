@@ -14,10 +14,10 @@ inputs:
   gcp_sa_key:
     description: 'The GCP service account key to use for authentication'
     required: false
-  PROJECT_PATH:
+  project_path:
     description: 'The path to the project directory'
     required: false
-  PROJECT_ID:
+  project_id:
     description: 'The Firebase project ID to use'
     required: false
 runs:
@@ -29,6 +29,3 @@ runs:
         node-version: '20'
     - run: ${{ github.action_path }}/entrypoint.sh ${{ inputs.args }}
       shell: bash
-      env:
-        PROJECT_PATH: ${{ inputs.PROJECT_PATH }}
-        PROJECT_ID: ${{ inputs.PROJECT_ID }}

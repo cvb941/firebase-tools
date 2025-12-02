@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -f "firebase.json" ]; then
+  exit 0
+else
+  echo "Error: Not in a Firebase app directory (could not locate firebase.json)" >&2
+  exit 1
+fi
