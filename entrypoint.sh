@@ -27,17 +27,27 @@ if [ -n "$GCP_SA_KEY" ]; then
   export GOOGLE_APPLICATION_CREDENTIALS="$GCP_SA_KEY_PATH"
 fi
 
+if [ -n "$INPUT_PROJECT_PATH" ]; then
+  PROJECT_PATH=$INPUT_PROJECT_PATH
+fi
+
+if [ -n "$INPUT_PROJECT_ID" ]; then
+  PROJECT_ID=$INPUT_PROJECT_ID
+fi
+
 if [ -n "$PROJECT_PATH" ]; then
   cd "$PROJECT_PATH"
 fi
 
+: "${FIREBASE_COMMAND:="npx firebase-tools@14.26.0"}"
+
 if [ -n "$PROJECT_ID" ]; then
     echo "setting firebase project to $PROJECT_ID"
-    npx firebase-tools@14.26.0 use --add "$PROJECT_ID"
+    sh -c "$FIREBASE_COMMAND use --add '$PROJECT_ID'"
 fi
 
 # if the args starts with ./ we are running a script
 case "$*" in
   ./*) sh -c "$*";;
-  *) sh -c "npx firebase-tools@14.26.0 $*";;
+  *) sh -c "$FIREBASE_COMMAND $*";;
 esac
